@@ -1,0 +1,14 @@
+[package]
+name    = "fmst-harness-arm"
+edition = { workspace = true }
+version = { workspace = true }
+license = { workspace = true }
+
+[[bin]]
+name = "fmst-harness-arm"
+path = "src/main.rs"
+
+[dependencies]
+fmst-iib-runtime = { path = "../fmst-iib-runtime", features = ["arm"] }
+log              = { workspace = true }
+clap             = { version = "4", features = ["derive"] }

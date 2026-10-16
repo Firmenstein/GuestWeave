@@ -1,0 +1,80 @@
+diff --git a/crates/libafl_qemu/src/qemu/mod.rs b/crates/libafl_qemu/src/qemu/mod.rs
+index 3199b335f4b4249b3ba2a949f53817474ca135b0..a068f754dd1d2e6ff123b2d4c33577a6ba40ea4c 100644
+--- a/crates/libafl_qemu/src/qemu/mod.rs
++++ b/crates/libafl_qemu/src/qemu/mod.rs
+@@ -121,8 +121,18 @@ pub enum QemuParams {
+     // QemuConfig is quite big, at least 240 bytes so we use a Box
+     Config(Box<QemuConfig>),
+     Cli(Vec<String>),
++    /// Raw argv bytes for linux-user startup.  Guest argv/environment values
++    /// are byte strings on Linux and need not be UTF-8; keeping this variant
++    /// separate preserves the existing String-based API while allowing a
++    /// harness to pass exact bytes through QEMU's C argv boundary.
++    CliBytes(Vec<Vec<u8>>),
+ }
+
++/// Explicit constructor for a byte-preserving QEMU command line.  A wrapper
++/// avoids overlapping the historical blanket `From<Vec<T>>` implementation.
++#[derive(Debug, Clone)]
++pub struct QemuCliBytes(pub Vec<Vec<u8>>);
++
+ #[derive(Debug, Clone)]
+ pub struct QemuMemoryChunk {
+     addr: GuestAddrKind,
+@@ -240,17 +250,32 @@ where
+
+ impl QemuParams {
+     pub fn to_cli(&self) -> Vec<String> {
++        self.to_cli_bytes()
++            .into_iter()
++            .map(|value| String::from_utf8_lossy(&value).into_owned())
++            .collect()
++    }
++
++    /// Return QEMU's startup argv without converting through UTF-8.
++    pub fn to_cli_bytes(&self) -> Vec<Vec<u8>> {
+         match self {
+             QemuParams::Config(cfg) => cfg
+                 .to_string()
+                 .split(' ')
+-                .map(ToString::to_string)
++                .map(|value| value.as_bytes().to_vec())
+                 .collect(),
+-            QemuParams::Cli(cli) => cli.clone(),
++            QemuParams::Cli(cli) => cli.iter().map(|value| value.as_bytes().to_vec()).collect(),
++            QemuParams::CliBytes(cli) => cli.clone(),
+         }
+     }
+ }
+
++impl From<QemuCliBytes> for QemuParams {
++    fn from(cli: QemuCliBytes) -> Self {
++        Self::CliBytes(cli.0)
++    }
++}
++
+ impl MemAccessInfo {
+     #[must_use]
+     pub fn memop(&self) -> libafl_qemu_sys::MemOp {
+@@ -561,10 +586,10 @@ impl Qemu {
+                     .map_err(|_| unreachable!("QEMU_CONFIG was already set but Qemu was not init!"))
+                     .expect("Could not set QEMU Config.");
+             }
+-            QemuParams::Cli(_) => {}
++            QemuParams::Cli(_) | QemuParams::CliBytes(_) => {}
+         }
+
+-        let args = params.to_cli();
++        let args = params.to_cli_bytes();
+
+         if args.is_empty() {
+             return Err(QemuInitError::EmptyArgs);
+@@ -588,7 +613,7 @@ impl Qemu {
+
+         let args: Vec<CString> = args
+             .iter()
+-            .map(|x| CString::new(AsRef::<str>::as_ref(x)).unwrap())
++            .map(|x| CString::new(x.as_slice()).unwrap())
+             .collect();
+         let mut argv: Vec<*const u8> = args.iter().map(|x| x.as_ptr().cast::<u8>()).collect();
+         argv.push(ptr::null()); // argv is always null terminated.

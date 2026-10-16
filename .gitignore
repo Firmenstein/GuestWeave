@@ -1,0 +1,38 @@
+# Build and delivery outputs
+/target/
+**/target/
+/tmp/
+/dist/
+/vendor/
+**/__pycache__/
+*.py[cod]
+*.rs.bk
+*.log
+qemu_*.core
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+!.env.template
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+credentials-*.json
+.venv/
+.DS_Store
+.vscode/
+.idea/
+.codex/
+.claude/
+.agents/
+.playwright-mcp/
+.pytest_cache/
+
+# Private development notes; public API and build docs live directly in docs/
+/AGENTS.md
+/docs/workflow/
+/docs/internal/
+/handoff/

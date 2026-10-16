@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "rust_version": "1.98.0",
+  "scope": "Linux/glibc usermode: x86_64, arm, mips, mipsbe",
+  "sources": {
+    "qemu": {
+      "repository": "https://github.com/Firmenstein/qemu-libafl-bridge",
+      "commit": "0ec45e659f87820be0f542ed33601dbdc4458340",
+      "upstream": {
+        "repository": "https://github.com/AFLplusplus/qemu-libafl-bridge",
+        "commit": "d7a6067ffc94fbb4caad409d390e099630b71941"
+      }
+    },
+    "libvharness": {
+      "repository": "https://github.com/Firmenstein/libvharness",
+      "commit": "ee25288cf283dfbe90e83a4833c7b76866d32fa3",
+      "upstream": {
+        "repository": "https://github.com/rmalmain/libvharness.git",
+        "commit": "9a316966ce7aa4bd9f733491511e6ac4be6dd980"
+      }
+    }
+  }
+}

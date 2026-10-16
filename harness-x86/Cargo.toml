@@ -1,0 +1,14 @@
+[package]
+name    = "fmst-harness-x86"
+edition = { workspace = true }
+version = { workspace = true }
+license = { workspace = true }
+
+[[bin]]
+name = "fmst-harness-x86"
+path = "src/main.rs"
+
+[dependencies]
+fmst-iib-runtime = { path = "../fmst-iib-runtime", features = ["x86_64"] }
+log              = { workspace = true }
+clap             = { version = "4", features = ["derive"] }

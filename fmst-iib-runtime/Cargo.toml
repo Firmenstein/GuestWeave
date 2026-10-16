@@ -1,0 +1,32 @@
+[package]
+name    = "fmst-iib-runtime"
+edition = { workspace = true }
+version = { workspace = true }
+license = { workspace = true }
+
+[features]
+default = []
+arm     = ["libafl_qemu/arm", "libafl_qemu/usermode"]
+mips    = ["libafl_qemu/mips", "libafl_qemu/usermode"]
+mipsbe  = ["libafl_qemu/mips", "libafl_qemu/usermode", "libafl_qemu/be"]
+x86_64  = ["libafl_qemu/x86_64", "libafl_qemu/usermode"]
+
+[dependencies]
+fmst-iib-api = { path = "../fmst-iib-api" }
+libafl_qemu  = { workspace = true, features = ["fork"] }
+libafl       = { workspace = true }
+libafl_bolts = { workspace = true }
+libloading   = { workspace = true }
+serde        = { workspace = true }
+serde_json   = { workspace = true }
+log          = { workspace = true }
+libc         = { workspace = true }
+goblin       = { workspace = true }
+thiserror    = { workspace = true }
+env_logger   = { workspace = true }
+
+[build-dependencies]
+cc = "1"
+
+[dev-dependencies]
+tempfile = "3"

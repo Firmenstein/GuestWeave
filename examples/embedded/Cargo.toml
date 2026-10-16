@@ -1,0 +1,25 @@
+[package]
+name = "guestweave-embedded-example"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# An independent consumer, deliberately outside the framework workspace.
+[workspace]
+
+[features]
+default = ["x86_64"]
+x86_64 = ["guestweave/x86_64"]
+arm = ["guestweave/arm"]
+mips = ["guestweave/mips"]
+mipsbe = ["guestweave/mipsbe"]
+
+[dependencies]
+guestweave = { path = "../.." }
+
+[build-dependencies]
+goblin = "0.9"
+
+[dev-dependencies]
+serde_json = "1"
+tempfile = "3"

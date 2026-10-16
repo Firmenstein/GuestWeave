@@ -1,0 +1,26 @@
+[package]
+name = "guestweave-native-call-contract"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Keep this consumer outside the framework workspace.  It exercises the
+# published GuestWeave API and therefore must not reach into runtime internals.
+[workspace]
+
+[features]
+default = ["x86_64"]
+x86_64 = ["guestweave/x86_64"]
+arm = ["guestweave/arm"]
+mips = ["guestweave/mips"]
+mipsbe = ["guestweave/mipsbe"]
+
+[dependencies]
+guestweave = { path = "../.." }
+
+[build-dependencies]
+goblin = "0.9"
+
+[dev-dependencies]
+serde_json = "1"
+tempfile = "3"

@@ -1,0 +1,19 @@
+[package]
+name    = "fmst-harness-mips"
+edition = { workspace = true }
+version = { workspace = true }
+license = { workspace = true }
+
+[features]
+default = ["little-endian"]
+little-endian = ["fmst-iib-runtime/mips"]
+big-endian = ["fmst-iib-runtime/mipsbe"]
+
+[[bin]]
+name = "fmst-harness-mips"
+path = "src/main.rs"
+
+[dependencies]
+fmst-iib-runtime = { path = "../fmst-iib-runtime", default-features = false }
+log              = { workspace = true }
+clap             = { version = "4", features = ["derive"] }

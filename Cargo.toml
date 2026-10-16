@@ -1,0 +1,58 @@
+[package]
+name = "guestweave"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "LibAFL-QEMU guest intervention and rehosting runtime framework"
+
+[lib]
+path = "src/lib.rs"
+
+[features]
+default = []
+mock = ["fmst-iib-api/mock"]
+arm = ["fmst-iib-runtime/arm"]
+mips = ["fmst-iib-runtime/mips"]
+mipsbe = ["fmst-iib-runtime/mipsbe"]
+x86_64 = ["fmst-iib-runtime/x86_64"]
+
+[dependencies]
+fmst-iib-api = { path = "fmst-iib-api" }
+fmst-iib-runtime = { path = "fmst-iib-runtime", optional = true }
+
+[[example]]
+name = "pseudo_file"
+required-features = ["mock"]
+
+[workspace]
+resolver = "2"
+members = [
+    ".",
+    "fmst-iib-api",
+    "fmst-iib-runtime",
+    "harness-arm",
+    "harness-mips",
+    "harness-x86",
+]
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+license = "Apache-2.0"
+
+[workspace.dependencies]
+libafl       = { path = "../lib/LibAFL/crates/libafl" }
+libafl_bolts = { path = "../lib/LibAFL/crates/libafl_bolts" }
+libafl_qemu  = { path = "../lib/LibAFL/crates/libafl_qemu", default-features = false }
+libloading   = "0.8"
+serde        = { version = "1", features = ["derive"] }
+serde_json   = "1"
+log          = "0.4"
+libc         = "0.2"
+env_logger   = "0.11"
+goblin       = "0.9"
+thiserror    = "1"
+
+[patch.crates-io]
+libafl       = { path = "../lib/LibAFL/crates/libafl" }
+libafl_qemu  = { path = "../lib/LibAFL/crates/libafl_qemu" }

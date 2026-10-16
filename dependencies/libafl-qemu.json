@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "repository": "https://github.com/Firmenstein/LibAFL",
+  "checkout": "../lib/LibAFL",
+  "commit": "c086e213de74e1ffe8a44a9f4ccc793cefc7a076",
+  "version": "0.16.1",
+  "patch_file": "patches/libafl-qemu-cli-bytes.patch",
+  "patch_sha256": "8275ec8593ec23a37ffc074cbdcf857d17c52331d1c2aa4f0eac8766a0a2774e",
+  "patched_path": "crates/libafl_qemu/src/qemu/mod.rs",
+  "upstream": {
+    "repository": "https://github.com/AFLplusplus/LibAFL",
+    "commit": "92ad89454765440c7c03b87b11d5dbde753f9633",
+    "version": "0.16.1"
+  },
+  "patch_status": "integrated",
+  "source_sha256": {
+    "crates/libafl_qemu/src/qemu/mod.rs": "f4c6058feb7738b69a157b395fddd2f1f723594ba50f32663da7a2d54f2a1886",
+    "crates/libafl_qemu/libafl_qemu_build/src/build.rs": "64bcb67b78a0cb50a8939e70e4a2c0f53210c071d2f99b91430ba1ad7f66e4c8",
+    "crates/libafl_qemu/libvharness_sys/build.rs": "7cc7f4e793a7a444b889f3d3779efaf5a1e133d1c348d8dde3cdd1ad5dfffeb6"
+  }
+}
